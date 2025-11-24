@@ -513,7 +513,7 @@
         <button class="back-btn" onclick="goBack('#home')">Back to Home</button>
         <h2>About Us</h2>
         <div class="about-us-box">
-            <p>BeauCall is A TRUSTED CALL-OUT SALON SERVICE, accepting appointments to homes, hotels, and other big events. Available from any salon, anytime, and anywhere.</p>
+            <p>BeauCall is a Trusted Call-out Salon Service Since 2025. Accepting Appointments to Homes, Hotels, and Other Big Events. Available from Any Salon, Anytime, and Anywhere.</p>
         </div>
         <div class="about-images">
              <img src="model 1.jpg" alt="Model 1">
@@ -547,11 +547,27 @@
         <form id="booking-form">
             <input type="text" id="name" placeholder="Nama Lengkap" required>
             <input type="tel" id="whatsapp" placeholder="Nomor WhatsApp (0856-9487-0477)" required>
-            <input type="text" id="address" placeholder="Alamat Lengkap (Rumah/Hotel/Event)" required>
+            
+            <select id="region" required style="border-color: var(--secondary); background-color: #fffaf0;">
+                <option value="">-- Pilih Daerah Domisili --</option>
+                <option value="jakpus">Jakarta Pusat</option>
+                <option value="jaksel">Jakarta Selatan</option>
+                <option value="jakbar">Jakarta Barat</option>
+                <option value="jaktim">Jakarta Timur</option>
+                <option value="jakut">Jakarta Utara</option>
+                <option value="bekasi">Bekasi</option>
+                <option value="depok">Depok</option>
+                <option value="tangerang">Tangerang</option>
+                <option value="bogor">Bogor</option>
+            </select>
+
+            <input type="text" id="address" placeholder="Alamat Lengkap Jalan/Blok/No. Rumah" required>
+            
             <div class="date-time-group" style="display: flex; gap: 1rem;">
                 <input type="date" id="date" required style="flex:1;">
                 <input type="time" id="time" required style="flex:1;">
             </div>
+            
             <select id="service" required>
                 <option value="">Pilih Layanan</option>
                 <option value="Hair Cut">Hair Cut</option>
@@ -567,9 +583,9 @@
                 <option value="Graduation Makeup">Graduation Makeup</option>
                 <option value="Wedding / Engagement Makeup">Wedding / Engagement Makeup</option>
             </select>
+            
             <button type="button" id="search-salon-btn" class="btn">Cari Salon/Partner</button>
         </form>
-
         <div id="salon-results" style="display: none; margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
             <h3>Pilih Salon Partner Anda</h3>
             <div id="salon-list"></div>
@@ -595,7 +611,8 @@
     </footer>
 
     <script>
-    const TRANSITION_DELAY = 500; // 0.5s di CSS
+
+    const TRANSITION_DELAY = 500; 
 
     function toggleMenu() {
         const navLinks = document.querySelector('.nav-links');
@@ -604,30 +621,23 @@
 
     function navigateTo(targetId) {
         const target = document.querySelector(targetId);
-        
         document.querySelectorAll('section').forEach(sec => {
             if (sec.classList.contains('fade-in')) {
                 sec.classList.remove('fade-in');
                 sec.classList.add('fade-out');
-
                 setTimeout(() => {
-                    if (sec !== target) { 
-                        sec.style.display = 'none';
-                    }
+                    if (sec !== target) sec.style.display = 'none';
                 }, TRANSITION_DELAY);
             } else {
                  sec.style.display = 'none';
             }
         });
-
         target.style.display = 'flex'; 
-        
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
         setTimeout(() => {
             target.classList.remove('fade-out');
             target.classList.add('fade-in');
-        }, 300);
+        }, 50);
     }
     
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -638,56 +648,126 @@
         });
     });
 
-    // Back Button Function
-    function goBack(targetId) {
-        navigateTo(targetId);
-    }
+    function goBack(targetId) { navigateTo(targetId); }
 
-    // Initial load logic
     window.addEventListener('load', () => {
-        document.querySelectorAll('section').forEach(sec => {
-            sec.style.display = 'none';
-        });
+        document.querySelectorAll('section').forEach(sec => { sec.style.display = 'none'; });
         const homeSection = document.querySelector('#home');
         homeSection.style.display = 'flex'; 
         homeSection.classList.add('fade-in');
     });
 
-    
-    /* --- LOGIKA BOOKING --- */
-    
-    const availableSalons = [
-        { id: 1, name: "BeauSalon Jakarta Pusat", estTime: "30 menit", rating: 4.8 },
-        { id: 2, name: "The Gold Touch Beauty", estTime: "45 menit", rating: 4.9 },
-        { id: 3, name: "Homey Hair & Spa", estTime: "1 jam", rating: 4.5 }
-    ];
+    // DATABASE CABANG UTAMA & PARTNER PER DAERAH
+    const regionData = {
+        'jakpus': {
+            eta: "20 - 30 Menit", 
+            salons: [
+                { id: 'jp-1', name: "BeauSalon Jakarta Pusat (Pusat)", desc: "Cabang Utama Jakarta Pusat. Layanan Terlengkap.", rating: 5.0 },
+                { id: 'jp-2', name: "Menteng Hair Expert", desc: "Partner spesialis styling & cutting.", rating: 4.8 }
+            ]
+        },
+        'jaksel': {
+            eta: "30 - 45 Menit",
+            salons: [
+                { id: 'js-1', name: "BeauSalon Jakarta Selatan", desc: "Cabang Utama Jakarta Selatan. Spesialis Makeup & Coloring.", rating: 4.9 },
+                { id: 'js-2', name: "Kemang Beauty Home", desc: "Partner premium area Kemang & Antasari.", rating: 4.7 }
+            ]
+        },
+        'jakbar': {
+            eta: "30 - 45 Menit",
+            salons: [
+                { id: 'jb-1', name: "BeauSalon Jakarta Barat", desc: "Cabang Utama Jakarta Barat.", rating: 4.8 },
+                { id: 'jb-2', name: "Puri Indah Glamour", desc: "Partner area Puri & Kebon Jeruk.", rating: 4.6 }
+            ]
+        },
+        'jaktim': {
+            eta: "30 - 45 Menit",
+            salons: [
+                { id: 'jt-1', name: "BeauSalon Jakarta Timur", desc: "Cabang Utama Jakarta Timur.", rating: 4.8 },
+                { id: 'jt-2', name: "Rawamangun Cuts", desc: "Partner area Rawamangun.", rating: 4.5 }
+            ]
+        },
+        'jakut': {
+            eta: "30 - 50 Menit",
+            salons: [
+                { id: 'ju-1', name: "BeauSalon Jakarta Utara", desc: "Cabang Utama Jakarta Utara.", rating: 4.8 },
+                { id: 'ju-2', name: "PIK Hair Studio", desc: "Partner area PIK & Pluit.", rating: 4.9 }
+            ]
+        },
+        'bekasi': {
+            eta: "45 - 60 Menit",
+            salons: [
+                { id: 'bks-1', name: "BeauSalon Bekasi", desc: "Cabang Utama Bekasi. Melayani Kota & Kabupaten.", rating: 4.8 },
+                { id: 'bks-2', name: "Galaxy Home Spa", desc: "Partner area Grand Galaxy & Pekayon.", rating: 4.6 }
+            ]
+        },
+        'depok': {
+            eta: "45 - 60 Menit",
+            salons: [
+                { id: 'dpk-1', name: "BeauSalon Depok", desc: "Cabang Utama Depok. Margonda & Sekitarnya.", rating: 4.8 },
+                { id: 'dpk-2', name: "Cinere Beauty", desc: "Partner area Cinere.", rating: 4.5 }
+            ]
+        },
+        'tangerang': {
+            eta: "40 - 60 Menit",
+            salons: [
+                { id: 'tng-1', name: "BeauSalon Tangerang", desc: "Cabang Utama Tangerang/BSD.", rating: 4.9 },
+                { id: 'tng-2', name: "Gading Serpong MUA", desc: "Partner area Serpong.", rating: 4.7 }
+            ]
+        },
+        'bogor': {
+            eta: "60 - 90 Menit",
+            salons: [
+                { id: 'bgr-1', name: "BeauSalon Bogor", desc: "Cabang Utama Bogor Kota.", rating: 4.7 },
+                { id: 'bgr-2', name: "Sentul City Stylist", desc: "Partner area Sentul.", rating: 4.6 }
+            ]
+        }
+    };
 
     let selectedSalon = null;
+    let currentEta = ""; 
 
     function handleBookingSearch() {
         const service = document.getElementById('service').value;
+        const region = document.getElementById('region').value; 
+        const address = document.getElementById('address').value;
 
         const salonListContainer = document.getElementById('salon-list');
         const salonResultsSection = document.getElementById('salon-results');
         const confirmBtn = document.getElementById('confirm-booking-btn');
         
-        if (!service) {
+        // 1. Validasi: Daerah & Layanan Wajib Diisi
+        if (!service || !region) {
+            alert("Mohon pilih 'Daerah Domisili' dan 'Layanan' terlebih dahulu.");
             salonResultsSection.style.display = 'none';
             return;
         }
+        
+        // 2. Ambil Data Berdasarkan Region yang Dipilih
+        const data = regionData[region];
+        if (!data) return; 
 
+        currentEta = data.eta; // Simpan estimasi waktu
+        const availableSalons = data.salons;
+
+        // Reset Tampilan
         salonListContainer.innerHTML = '';
         selectedSalon = null;
         confirmBtn.disabled = true;
 
+        // 3. Render Daftar Salon
         availableSalons.forEach(salon => {
             const salonDiv = document.createElement('div');
             salonDiv.classList.add('salon-item');
             salonDiv.setAttribute('data-salon-id', salon.id);
+            
             salonDiv.innerHTML = `
                 <h4>${salon.name}</h4>
-                <p>Layanan: <strong>${service}</strong></p>
-                <p>Est. Kedatangan: ${salon.estTime} | Rating: ${salon.rating} <i class="fas fa-star" style="color: #d4af37;"></i></p>
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;"><em>${salon.desc}</em></p>
+                <div style="font-size: 0.85rem; background: #f9f9f9; padding: 5px; border-radius: 4px;">
+                    <strong>Estimasi Tiba:</strong> ${currentEta} <br>
+                    <strong>Rating:</strong> ${salon.rating} <i class="fas fa-star" style="color: #d4af37;"></i>
+                </div>
             `;
             
             salonDiv.addEventListener('click', () => {
@@ -701,7 +781,9 @@
         });
 
         salonResultsSection.style.display = 'block';
-        salonResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            salonResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     }
 
     function proceedToWhatsApp() {
@@ -712,46 +794,43 @@
         }
 
         if (!selectedSalon) {
-            alert("Mohon pilih salah satu Salon Partner terlebih dahulu.");
+            alert("Mohon pilih salah satu Salon Partner di bawah.");
             return;
         }
 
         const name = document.getElementById('name').value;
         const whatsapp = document.getElementById('whatsapp').value;
+        const regionRaw = document.getElementById('region');
+        const regionName = regionRaw.options[regionRaw.selectedIndex].text; 
         const address = document.getElementById('address').value;
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
         const service = document.getElementById('service').value;
 
-        const message = `Halo BeauCall, saya telah memilih salon dan siap untuk konfirmasi pembayaran.
+        const message = `Halo BeauCall, saya ingin booking layanan.
 
-*Detail Pemesanan:*
+*Detail Pelanggan:*
 Nama: ${name}
-WhatsApp: ${whatsapp}
-Alamat: ${address}
-Tanggal: ${date}
-Waktu: ${time}
-Layanan: ${service}
-Salon Partner Terpilih: ${selectedSalon.name} (ID: ${selectedSalon.id})
+No WA: ${whatsapp}
+Daerah: ${regionName}
+Alamat Lengkap: ${address}
 
-Mohon kirimkan detail pembayaran untuk booking ini. Terima kasih!`;
+*Detail Layanan:*
+Layanan: ${service}
+Tanggal: ${date}
+Jam: ${time}
+
+*Pilihan Mitra:*
+Salon: ${selectedSalon.name}
+Estimasi Tiba: ${currentEta}
+
+Mohon info total pembayaran. Terima kasih!`;
 
         const waUrl = `https://wa.me/6285694870477?text=${encodeURIComponent(message)}`;
         window.open(waUrl, '_blank');
     }
 
-    document.getElementById('service').addEventListener('change', handleBookingSearch);
-
-    document.getElementById('search-salon-btn').addEventListener('click', () => {
-        if (document.getElementById('service').value) {
-            handleBookingSearch();
-        } else {
-            alert("Mohon pilih layanan yang diinginkan terlebih dahulu.");
-        }
-    });
-
+    document.getElementById('search-salon-btn').addEventListener('click', handleBookingSearch);
     document.getElementById('confirm-booking-btn').addEventListener('click', proceedToWhatsApp);
 
-    </script>
-</body>
-</html>
+</script>
