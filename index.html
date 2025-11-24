@@ -826,7 +826,7 @@
         
         <form id="booking-form">
             <input type="text" id="name" placeholder="Nama Lengkap" required>
-            <input type="tel" id="whatsapp" placeholder="Nomor WhatsApp (0856-9487-0477)" required>
+            <input type="tel" id="whatsapp" placeholder="Nomor WhatsApp" required>
             
             <select id="region" required style="border-color: var(--secondary); background-color: #fffaf0;">
                 <option value="">-- Pilih Daerah Domisili --</option>
@@ -964,21 +964,40 @@
             </div>
         </div>
     <!-- review -->
-     <div id="review-modal" class="modal-overlay">
+    <div id="review-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 500px;">
             <span class="close-modal" onclick="closeReviewModal()">&times;</span>
             
-            <div style="text-align: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family: var(--font-heading); color: var(--dark-brown);">Apa Kata Mereka?</h3>
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <h3 style="font-family: var(--font-heading); color: var(--dark-brown);">Ulasan Pelanggan</h3>
                 <p id="review-region-title" style="color: var(--secondary); font-weight: bold; font-size: 0.9rem;"></p>
             </div>
 
-            <div id="review-list-container" style="max-height: 300px; overflow-y: auto; text-align: left;">
-                </div>
+            <div id="review-read-view">
+                <div id="review-list-container" style="max-height: 300px; overflow-y: auto; text-align: left; padding-right:5px;">
+                    </div>
+                <hr style="margin: 1rem 0; border: 0; border-top: 1px dashed #ccc;">
+                <button class="btn" onclick="toggleReviewMode('write')" style="width: 100%;">Tulis Ulasan</button>
+            </div>
 
-            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px dashed #ccc;">
-            
-            <button class="btn" onclick="showCustomAlert('Anda harus menyelesaikan minimal satu pesanan untuk dapat menulis ulasan.', 'Info')" style="width: 100%; background-color: #eee; color: #555;">Tulis Ulasan</button>
+            <div id="review-write-view" style="display: none; text-align: left;">
+                <input type="text" id="new-review-name" placeholder="Nama Anda" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd;">
+                
+                <p style="margin-bottom: 5px; font-size: 0.9rem;">Rating:</p>
+                <select id="new-review-rating" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
+                    <option value="4">⭐⭐⭐⭐ (Puas)</option>
+                    <option value="3">⭐⭐⭐ (Cukup)</option>
+                </select>
+
+                <textarea id="new-review-text" rows="3" placeholder="Ceritakan pengalaman Anda..." style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; font-family: inherit;"></textarea>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="toggleReviewMode('read')" style="flex: 1; background-color: #ccc; color: #333;">Batal</button>
+                    <button class="btn" onclick="submitFakeReview()" style="flex: 1;">Kirim Ulasan</button>
+                </div>
+            </div>
+
         </div>
     </div>
     <div id="custom-alert-overlay">
@@ -1142,58 +1161,58 @@
     }   
 
     /* =========================================
-       4. REVIEW SYSTEM (LOGIKA BARU)
+       4. REVIEW SYSTEM (UPDATED)
        ========================================= */
 
-    // Database Review Dummy per Region
+    // Database Review dengan Nama Salon Cabang
     const reviewDatabase = {
         'jakpus': [
-            { name: "Sarah A.", text: "BeauSalon Jakpus the best! Stylistnya on time banget ke Menteng.", rating: 5 },
-            { name: "Dina M.", text: "Potong rambut di kantor jadi gampang. Hasilnya rapi.", rating: 5 },
-            { name: "Rina S.", text: "Suka banget sama pelayanan home servicenya, ramah.", rating: 4 },
-            { name: "Putri K.", text: "Harga affordable untuk layanan senyaman ini di Jakarta Pusat.", rating: 5 }
+            { name: "Sarah A.", salon: "BeauSalon Jakarta Pusat", text: "Stylistnya on time banget ke Menteng. Hasil potongannya rapi.", rating: 5 },
+            { name: "Dina M.", salon: "Menteng Hair Expert", text: "Potong rambut di kantor jadi gampang. Hemat waktu banget.", rating: 5 },
+            { name: "Rina S.", salon: "BeauSalon Jakarta Pusat", text: "Suka banget sama pelayanan home servicenya, ramah dan sopan.", rating: 4 },
+            { name: "Putri K.", salon: "Menteng Hair Expert", text: "Harga affordable untuk layanan senyaman ini di Jakarta Pusat.", rating: 5 }
         ],
         'jaksel': [
-            { name: "Jessica T.", text: "Makeup wisuda panggil ke Kemang, hasilnya flawless banget!", rating: 5 },
-            { name: "Amanda P.", text: "Creambath di rumah rasanya kayak di salon mahal Jaksel.", rating: 5 },
-            { name: "Bella R.", text: "Stylistnya gaul dan ngerti trend rambut sekarang.", rating: 4 },
-            { name: "Clara W.", text: "Recommended buat yang mager keluar macet-macetan.", rating: 5 }
+            { name: "Jessica T.", salon: "BeauSalon Jakarta Selatan", text: "Makeup wisuda panggil ke Kemang, hasilnya flawless banget!", rating: 5 },
+            { name: "Amanda P.", salon: "Kemang Beauty Home", text: "Creambath di rumah rasanya kayak di salon mahal Jaksel.", rating: 5 },
+            { name: "Bella R.", salon: "BeauSalon Jakarta Selatan", text: "Stylistnya gaul dan ngerti trend rambut sekarang.", rating: 4 },
+            { name: "Clara W.", salon: "Kemang Beauty Home", text: "Recommended buat yang mager keluar macet-macetan.", rating: 5 }
         ],
         'jakbar': [
-            { name: "Vivi L.", text: "Smoothing rambut di rumah hasil tetep badai. Thanks BeauCall!", rating: 5 },
-            { name: "Lina T.", text: "Puri Indah area tercover dengan baik. Stylist sopan.", rating: 4 },
-            { name: "Grace O.", text: "Praktis banget buat ibu rumah tangga kayak saya.", rating: 5 }
+            { name: "Vivi L.", salon: "BeauSalon Jakarta Barat", text: "Smoothing rambut di rumah hasil tetep badai. Thanks BeauCall!", rating: 5 },
+            { name: "Lina T.", salon: "Puri Indah Glamour", text: "Puri Indah area tercover dengan baik. Stylist sopan.", rating: 4 },
+            { name: "Grace O.", salon: "BeauSalon Jakarta Barat", text: "Praktis banget buat ibu rumah tangga kayak saya.", rating: 5 }
         ],
         'jaktim': [
-            { name: "Nadia H.", text: "Seneng banget ada layanan ini di Rawamangun.", rating: 5 },
-            { name: "Siti N.", text: "Murah tapi gak murahan. Stylistnya pro.", rating: 4 },
-            { name: "Dewi A.", text: "Langganan potong rambut anak di rumah.", rating: 5 }
+            { name: "Nadia H.", salon: "BeauSalon Jakarta Timur", text: "Seneng banget ada layanan ini di Rawamangun.", rating: 5 },
+            { name: "Siti N.", salon: "Rawamangun Cuts", text: "Murah tapi gak murahan. Stylistnya pro.", rating: 4 },
+            { name: "Dewi A.", salon: "BeauSalon Jakarta Timur", text: "Langganan potong rambut anak di rumah.", rating: 5 }
         ],
         'jakut': [
-            { name: "Tiffany.", text: "MUA nya dateng tepat waktu ke PIK. Makeup tahan lama.", rating: 5 },
-            { name: "Sherly.", text: "Hair treatment sambil nungguin anak sekolah. Mantap.", rating: 5 },
-            { name: "Angel.", text: "Salon panggilan terbaik di Pluit sejauh ini.", rating: 4 }
+            { name: "Tiffany.", salon: "BeauSalon Jakarta Utara", text: "MUA nya dateng tepat waktu ke PIK. Makeup tahan lama.", rating: 5 },
+            { name: "Sherly.", salon: "PIK Hair Studio", text: "Hair treatment sambil nungguin anak sekolah. Mantap.", rating: 5 },
+            { name: "Angel.", salon: "BeauSalon Jakarta Utara", text: "Salon panggilan terbaik di Pluit sejauh ini.", rating: 4 }
         ],
         'bekasi': [
-            { name: "Rani B.", text: "Akhirnya di Bekasi ada salon panggilan yang bagus! Galaxy area aman.", rating: 5 },
-            { name: "Wulan D.", text: "Hemat waktu banget gak perlu macet ke mall.", rating: 4 },
-            { name: "Tya S.", text: "Stylist Bekasi ramah-ramah. Suka pijatannya pas creambath.", rating: 5 },
-            { name: "Fitri H.", text: "Baru coba sekali langsung cocok.", rating: 5 }
+            { name: "Rani B.", salon: "BeauSalon Bekasi", text: "Akhirnya di Bekasi ada salon panggilan yang bagus! Galaxy area aman.", rating: 5 },
+            { name: "Wulan D.", salon: "Galaxy Home Spa", text: "Hemat waktu banget gak perlu macet ke mall.", rating: 4 },
+            { name: "Tya S.", salon: "BeauSalon Bekasi", text: "Stylist Bekasi ramah-ramah. Suka pijatannya pas creambath.", rating: 5 },
+            { name: "Fitri H.", salon: "Galaxy Home Spa", text: "Baru coba sekali langsung cocok.", rating: 5 }
         ],
         'depok': [
-            { name: "Ayu D.", text: "Anak UI wajib coba sih, praktis banget buat wisuda.", rating: 5 },
-            { name: "Laras P.", text: "Cinere area tercover. Stylistnya sabar banget.", rating: 5 },
-            { name: "Indah K.", text: "Harga mahasiswa tapi kualitas oke.", rating: 4 }
+            { name: "Ayu D.", salon: "BeauSalon Depok", text: "Anak UI wajib coba sih, praktis banget buat wisuda.", rating: 5 },
+            { name: "Laras P.", salon: "Cinere Beauty", text: "Cinere area tercover. Stylistnya sabar banget.", rating: 5 },
+            { name: "Indah K.", salon: "BeauSalon Depok", text: "Harga mahasiswa tapi kualitas oke.", rating: 4 }
         ],
         'tangerang': [
-            { name: "Gisel.", text: "BSD Area stylistnya cepet sampainya. Alatnya bersih.", rating: 5 },
-            { name: "Monika.", text: "Makeup lamaran panggil ke rumah, puas banget!", rating: 5 },
-            { name: "Vera.", text: "Layanan Gading Serpong top markotop.", rating: 5 }
+            { name: "Gisel.", salon: "BeauSalon Tangerang", text: "BSD Area stylistnya cepet sampainya. Alatnya bersih.", rating: 5 },
+            { name: "Monika.", salon: "Gading Serpong MUA", text: "Makeup lamaran panggil ke rumah, puas banget!", rating: 5 },
+            { name: "Vera.", salon: "BeauSalon Tangerang", text: "Layanan Gading Serpong top markotop.", rating: 5 }
         ],
         'bogor': [
-            { name: "Nengsih.", text: "Teh stylistna bageur pisan. Hasilna geulis.", rating: 5 },
-            { name: "Sari M.", text: "Sentul City aman terjangkau. Makasih BeauCall.", rating: 5 },
-            { name: "Hana F.", text: "Perawatan rambut di rumah adem banget udaranya.", rating: 4 }
+            { name: "Nengsih.", salon: "BeauSalon Bogor", text: "Teh stylistna bageur pisan. Hasilna geulis.", rating: 5 },
+            { name: "Sari M.", salon: "Sentul City Stylist", text: "Sentul City aman terjangkau. Makasih BeauCall.", rating: 5 },
+            { name: "Hana F.", salon: "BeauSalon Bogor", text: "Perawatan rambut di rumah adem banget udaranya.", rating: 4 }
         ]
     };
 
@@ -1203,46 +1222,64 @@
         const container = document.getElementById('review-list-container');
         const title = document.getElementById('review-region-title');
 
-        // VALIDASI: User harus pilih daerah dulu biar reviewnya relevan
+        // Reset View ke Read Mode
+        toggleReviewMode('read');
+
+        // VALIDASI
         if (!region) {
-            showCustomAlert("Silakan pilih 'Daerah Domisili' pada form Booking terlebih dahulu untuk melihat ulasan pelanggan di area Anda.", "Pilih Daerah");
-            // Scroll ke form booking untuk memudahkan user
+            showCustomAlert("Silakan pilih 'Daerah Domisili' pada form Booking terlebih dahulu.", "Pilih Daerah");
             document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
             return;
         }
 
-        // Ambil Data Review
+        // Ambil Data & Judul
         const reviews = reviewDatabase[region];
         const regionName = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
-
-        // Set Judul
         title.innerText = `Menampilkan Ulasan Area: ${regionName}`;
-        container.innerHTML = ""; // Bersihkan isi lama
+        container.innerHTML = ""; 
 
         if (reviews) {
-            // Acak urutan review biar terlihat dinamis (Shuffle Array)
-            const shuffled = [...reviews].sort(() => 0.5 - Math.random());
-            
-            // Ambil 3-4 review saja biar tidak kepanjangan
-            const selectedReviews = shuffled.slice(0, 4);
+            // LOGIKA SORTING: 
+            // Pisahkan review "Baru" (inputan user) dan review "Lama" (database dummy)
+            const newReviews = reviews.filter(r => r.isNew === true);
+            const oldReviews = reviews.filter(r => !r.isNew);
 
-            selectedReviews.forEach(rev => {
-                // Generate Bintang
+            // Acak review lama saja
+            const shuffledOld = [...oldReviews].sort(() => 0.5 - Math.random());
+            
+            // Gabungkan: Review baru DI ATAS, diikuti review lama yang sudah diacak
+            // Kita batasi total tampilan 10 review
+            const finalDisplay = [...newReviews, ...shuffledOld].slice(0, 10);
+
+            finalDisplay.forEach(rev => {
                 let stars = "";
                 for(let i=0; i<rev.rating; i++) stars += '<i class="fas fa-star"></i> ';
                 
-                // Generate Tanggal Acak (1-30 hari lalu)
-                const randomDays = Math.floor(Math.random() * 30) + 1;
+                // Tentukan Tanggal: Jika review baru -> "Baru saja", Jika lama -> Random hari
+                let dateDisplay;
+                if (rev.isNew) {
+                    dateDisplay = "<span style='color:var(--secondary); font-weight:bold;'>Baru saja</span>";
+                } else {
+                    const randomDays = Math.floor(Math.random() * 30) + 1;
+                    dateDisplay = `${randomDays} hari yang lalu`;
+                }
 
                 const card = document.createElement('div');
                 card.className = "review-card";
+                
+                // Highlight background sedikit jika review baru
+                if(rev.isNew) card.style.borderLeft = "3px solid var(--secondary)";
+
                 card.innerHTML = `
                     <div class="review-header">
-                        <span class="reviewer-name">${rev.name}</span>
+                        <div>
+                            <span class="reviewer-name">${rev.name}</span> 
+                            <span style="font-size:0.8rem; color:var(--secondary); margin-left:5px;">- ${rev.salon}</span>
+                        </div>
                         <span class="review-stars">${stars}</span>
                     </div>
                     <p class="review-text">"${rev.text}"</p>
-                    <p class="review-date">${randomDays} hari yang lalu</p>
+                    <p class="review-date">${dateDisplay}</p>
                 `;
                 container.appendChild(card);
             });
@@ -1251,6 +1288,69 @@
         }
 
         modal.style.display = "flex";
+    }
+
+    function closeReviewModal() {
+        document.getElementById('review-modal').style.display = "none";
+    }
+
+    // Logika Tulis Review Baru
+    function toggleReviewMode(mode) {
+        const readView = document.getElementById('review-read-view');
+        const writeView = document.getElementById('review-write-view');
+        
+        if (mode === 'write') {
+            readView.style.display = 'none';
+            writeView.style.display = 'block';
+        } else {
+            readView.style.display = 'block';
+            writeView.style.display = 'none';
+        }
+    }
+
+    function submitFakeReview() {
+        const name = document.getElementById('new-review-name').value;
+        const text = document.getElementById('new-review-text').value;
+        const rating = document.getElementById('new-review-rating').value;
+        const region = document.getElementById('region').value;
+
+        if (!name || !text) {
+            showCustomAlert("Mohon isi nama dan komentar Anda.", "Data Belum Lengkap");
+            return;
+        }
+
+        // 1. Pilih Nama Salon (Ambil acak dari database region agar terlihat nyata)
+        let assignedSalon = "BeauCall Service"; // Default
+        if (regionData[region] && regionData[region].salons.length > 0) {
+            // Pilih random salon dari daerah tersebut untuk ditempel ke nama user
+            const randomIdx = Math.floor(Math.random() * regionData[region].salons.length);
+            assignedSalon = regionData[region].salons[randomIdx].name;
+        }
+
+        // 2. Buat Data Review Baru
+        const newReview = {
+            name: name,
+            salon: assignedSalon,
+            text: text,
+            rating: parseInt(rating),
+            isNew: true // Penanda bahwa ini review baru (untuk logika tanggal)
+        };
+
+        // 3. Masukkan ke Database Array (Paling Atas)
+        if (!reviewDatabase[region]) {
+            reviewDatabase[region] = [];
+        }
+        reviewDatabase[region].unshift(newReview); // 'unshift' memasukkan ke urutan pertama
+
+        // 4. Notifikasi & Reset
+        showCustomAlert("Ulasan Anda berhasil ditambahkan!", "Terima Kasih");
+        
+        document.getElementById('new-review-name').value = "";
+        document.getElementById('new-review-text').value = "";
+
+        // 5. Refresh List agar review baru langsung terlihat
+        toggleReviewMode('read');
+        openReviews(); 
     }
 
     function closeReviewModal() {
