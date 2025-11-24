@@ -4,25 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeauCall – Salon Panggilan ke Rumah</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Reset dan Base Styles */
+        /* --- Reset & Variables --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
+        :root {
+            --main-bg: #f8f7f3; 
+            --primary: #fffefb;
+            --secondary: #c29d59;
+            /* --secondary: #d4af37; */
+            --accent: #ffffff;
+            --text: #333;
+            --dark-brown: #0f0f0f;
+            /* --dark-brown: #5a3a2a; */
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lora', serif;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            background-color: #ffffff;
+            font-family: var(--font-body);
+            background-color: var(--main-bg);
+            color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
         }
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
+
+        h1, h2, h3, h4, .logo, .btn, .nav-links a, button, .service-list-item {
+            font-family: var(--font-heading);
         }
+
         a {
             text-decoration: none;
             color: inherit;
@@ -32,23 +49,14 @@
             height: auto;
         }
 
-        /* Color Palette (Mengambil warna dari brosur) */
-        :root {
-            --primary: #f4e4bc; /* Krem lembut */
-            --secondary: #d4af37; /* Emas lembut */
-            --accent: #ffffff; /* Putih */
-            --text: #333;
-            --dark-brown: #a0522d; /* Warna cokelat untuk konsistensi */
-        }
-
-        /* Navigation */
+        /* --- Navigation --- */
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(248, 247, 243, 0.95); 
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
         nav {
@@ -60,17 +68,16 @@
             margin: 0 auto;
         }
         
-        /* Modifikasi Styling Logo */
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--secondary);
-            display: flex; /* Untuk menyejajarkan logo dan teks */
-            align-items: center; /* Untuk vertikal alignment */
-            gap: 0.5rem; /* Jarak antara logo dan teks */
+            color: var(--dark-brown);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .logo img {
-            height: 1.5rem; /* Atur tinggi gambar sesuai ukuran font logo (1.5rem) */
+            height: 2rem;
             width: auto;
         }
 
@@ -83,7 +90,9 @@
         }
         .nav-links a {
             font-weight: 600;
+            color: var(--dark-brown);
             transition: color 0.3s ease;
+            font-size: 1.1rem;
         }
         .nav-links a:hover {
             color: var(--secondary);
@@ -96,14 +105,14 @@
         .hamburger span {
             width: 25px;
             height: 3px;
-            background-color: var(--text);
+            background-color: var(--dark-brown);
             margin: 3px 0;
             transition: 0.3s;
         }
 
-        /* Sections */
+        /* --- Global Section Styles --- */
         section {
-            padding: 5rem 2rem 2rem;
+            padding: 0 2rem;
             max-width: 1200px;
             margin: 0 auto;
             transition: opacity 0.5s ease, transform 0.5s ease;
@@ -119,298 +128,317 @@
             transform: translateY(20px);
             max-height: 0;
             overflow: hidden;
-            padding-top: 0;
-            padding-bottom: 0;
+            padding: 0;
         }
         #home.fade-in, #about.fade-in, #menu.fade-in, #booking.fade-in {
-             max-height: none;
-             padding-top: 5rem; 
-             padding-bottom: 2rem;
+            max-height: none;
+            padding-top: 4.5rem; 
+            padding-bottom: 2rem;
+            min-height: auto;
         }
-
-
-        /* Back Button */
-        .back-btn {
-            display: inline-block;
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        .back-btn:hover {
-            background-color: #b8860b;
-        }
-
-        /* Hero Section */
-        #home {
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            flex-direction: row;	
-        }
-        .hero-content {
-            flex: 1;
-            min-width: 300px;
-            padding: 2rem;
-        }
-        .hero-content h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--dark-brown);	
-        }
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
+        /* --- Component Styles --- */
         .btn {
             background-color: var(--secondary);
             color: white;
             padding: 1rem 2rem;
-            border-radius: 5px;
+            border-radius: 0; 
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, letter-spacing 0.3s ease;
             border: none;
             cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
         .btn:hover {
             background-color: #b8860b;
-        }
-        .hero-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
-        }
-        .hero-image img {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            letter-spacing: 2px;
         }
 
-        /* About Section */
+        .back-btn {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--secondary);
+            padding: 0.5rem 0;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-family: var(--font-heading);
+            border-bottom: 1px solid var(--secondary);
+        }
+        .back-btn:hover {
+            color: var(--dark-brown);
+            border-bottom-color: var(--dark-brown);
+        }
+
+        /* --- HOME SECTION (New Layout) --- */
+        #home {
+            padding: 0 !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            min-height: auto; /* Memastikan tidak ada min-height yang mendorong gap */
+            display: flex;
+            flex-direction: row;
+            align-items: center; /* Diubah dari 'stretch' ke 'center' untuk centering vertikal */
+            background-color: var(--main-bg);
+        }
+
+        .home-left-text {
+            flex: 0.8; 
+            min-width: 350px;
+            padding: 6rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 2;
+        }
+
+        .home-left-text h1 {
+            font-size: 4rem;
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            font-style: italic;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .home-left-text p {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 80%;
+            color: #555;
+        }
+
+        .home-right-image {
+            flex: 0.8; 
+            min-width: 300px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+        }
+
+        .main-hero-img {
+            width: 80%; 
+            height: 100%;
+            object-fit: contain; 
+            object-position: center;
+        }
+
+        .overlay-logo-img {
+            position: absolute;
+            top: 100px; /* Disesuaikan agar tidak tertutup header */
+            left: 30px;
+            width: 180px; 
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(255,255,255,0.5));
+        }
+
+        /* --- About Section --- */
         #about {
-            background-color: var(--accent);
             text-align: center;
-            justify-content: flex-start;
         }
         #about h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            color: var(--secondary);
+            color: var(--dark-brown);
+            font-style: italic;
         }
-        #about p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+        .about-us-box {
+            background-color: #fff;
+            border: 1px solid var(--secondary);
+            padding: 2rem;
+            margin: 2rem auto;
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            position: relative;
+        }
+        .about-us-box::before {
+            content: '"';
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            color: var(--secondary);
+            position: absolute;
+            top: -2rem;
+            left: 1rem;
+            opacity: 0.3;
         }
         .about-images {
             display: flex;
             justify-content: center;
             gap: 2rem;
             flex-wrap: wrap;
+            margin-top: 3rem;
         }
         .about-images img {
             width: 300px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .about-us-box {
-            background-color: var(--primary);
-            border-left: 5px solid var(--secondary);
-            padding: 1.5rem;
-            margin-top: 2rem;
-            text-align: left;
-            border-radius: 5px;
-            max-width: 900px;
-            margin: 2rem auto;
-        }
-        .about-us-box p {
-            margin: 0;
-            font-style: italic;
-            font-size: 1rem;
-            color: var(--text);
+            height: 400px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #fff;
         }
 
-
-        /* Menu Section */
-        #menu {
-            background-color: var(--primary);
-            text-align: center;
-            justify-content: flex-start;
-        }
+        /* --- Menu Section --- */
         #menu h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 2rem;
-            color: var(--secondary);
+            color: var(--dark-brown);
+            text-align: center;
+            font-style: italic;
         }
         .services {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));	
-            gap: 1rem;	
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));    
+            gap: 1.5rem;    
         }
         .service {
-            background-color: var(--accent);
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-            text-align: left;
+            background-color: #fff;
+            padding: 2rem;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+            text-align: center;
         }
         .service:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            border-color: var(--secondary);
+            transform: translateY(-5px);
         }
         .service h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0;
+            font-size: 1.3rem;
             color: var(--dark-brown);
-        }
-        .service p {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #666;
-            margin-top: 0.2rem;
-        }
-        .service-list-item::before {
-            content: "✓ ";	
-            color: var(--secondary);
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
+            margin: 0;
         }
 
-        /* Booking Section */
-        #booking {
-            background-color: var(--accent);
-            text-align: center;
-            justify-content: flex-start;
-        }
+        /* --- Booking Section --- */
         #booking h2 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 2rem;
-            color: var(--secondary);
+            color: var(--dark-brown);
+            text-align: center;
+            font-style: italic;
         }
         form {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            padding: 2rem;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            gap: 1.5rem;
+            padding: 3rem;
+            background-color: #fff;
+            border: 1px solid #eee;
         }
         input, select {
             padding: 1rem;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #fafafa;
             font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font-body);
+            outline: none;
         }
-        /* Mengubah tombol Cari Salon menjadi type="button" */
-        button[type="button"], button[type="submit"] {
-            background-color: var(--secondary);
-            color: white;
-            padding: 1rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button[type="button"]:hover, button[type="submit"]:hover {
-            background-color: #b8860b;
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            background-color: #fff;
         }
 
-        /* New Salon Results Styling */
-        #salon-results h3 {
-            color: var(--dark-brown);
-            margin-bottom: 1rem;
-        }
+        /* Salon Results */
         .salon-item {
-            padding: 1rem;
+            padding: 1.5rem;
             margin-bottom: 1rem;
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            text-align: left;
+            border: 1px solid #eee;
+            background-color: #fff;
             cursor: pointer;
             transition: all 0.2s ease;
-            background-color: var(--accent);
         }
         .salon-item:hover {
-            background-color: var(--primary);
             border-color: var(--secondary);
         }
         .salon-item.selected {
-            border: 3px solid var(--secondary);
-            background-color: #fffaf0; /* Sedikit lebih terang dari primary */
-            font-weight: 600;
+            border: 2px solid var(--secondary);
+            background-color: #fffbf0;
         }
         .salon-item h4 {
-            margin: 0 0 0.5rem 0;
-            color: var(--dark-brown);
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--primary);
-            text-align: center;
-            padding: 2rem;
-        }
-        .footer-content {
-            display: flex;
-            justify-content: center;	
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            padding-bottom: 1rem;
-        }
-        .footer-section {
-            margin: 1rem 2rem;	
-            text-align: center;
-        }
-        .footer-section h4 {
+            font-size: 1.2rem;
             color: var(--dark-brown);
             margin-bottom: 0.5rem;
         }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #fff;
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid #eee;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: center;    
+            gap: 4rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+            flex-direction: column;
+        }
+        .footer-section h4 {
+            color: var(--dark-brown);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
         .social-icons a {
-            margin: 0 0.7rem;
-            font-size: 1.8rem;
-            color: var(--secondary);
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            color: var(--text);
             transition: color 0.3s ease;
         }
         .social-icons a:hover {
-            color: #b8860b;
-        }
-        footer p {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 1rem;
+            color: var(--secondary);
         }
         .team-info {
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            color: #999;
+            font-size: 0.7rem;
+            margin-top: 2rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            #home {
+                flex-direction: column-reverse;
+                height: auto;
+                padding-top: 60px !important;
+            }
+            .home-left-text {
+                padding: 3rem 2rem;
+                align-items: center;
+                text-align: center;
+            }
+            .home-right-image {
+                height: 50vh;
+                width: 100%;
+            }
+            .overlay-logo-img {
+                width: 120px;
+                top: 20px;
+                left: 20px;
+            }
+            .home-left-text h1 {
+                font-size: 3rem;
+            }
+            
             nav {
-                padding: 1rem 1rem;
+                padding: 1rem;
             }
             .nav-links {
                 display: none;
@@ -418,12 +446,13 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: var(--accent);
+                background-color: #fff;
                 flex-direction: column;
-                padding: 1rem 0;
+                padding: 2rem 0;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.05);
             }
             .nav-links li {
-                margin: 0.5rem 0;
+                margin: 1rem 0;
                 text-align: center;
             }
             .nav-links.active {
@@ -431,29 +460,6 @@
             }
             .hamburger {
                 display: flex;
-            }
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            #home {
-                flex-direction: column;
-                text-align: center;
-            }
-            .hero-content {
-                padding: 1rem;
-            }
-            .hero-image {
-                padding: 1rem;
-            }
-            .about-images {
-                flex-direction: column;
-                align-items: center;
-            }
-            .footer-content {
-                flex-direction: column;
-            }
-            .footer-section {
-                margin: 1rem 0;
             }
         }
     </style>
@@ -480,32 +486,31 @@
     </header>
 
     <section id="home" class="fade-in">
-        <div class="hero-content">
-            <h1>Salon Profesional, Kini Datang ke Rumah Anda</h1>
-            <p>Nikmati layanan kecantikan eksklusif tanpa harus keluar rumah. 
-			"Any Salon, Anytime, and Anywhere"</p>
-            <a href="#booking" class="btn">Pesan Sekarang</a>
+        <div class="home-left-text">
+            <h1>BeauCall</h1>
+            <p class="subtitle">Professional Home-Salon Services</p>
+            <p>"Any Salon, Anytime, and Anywhere"</p>
+            <a href="#booking" class="btn">Order Now</a>
         </div>
-        <div class="hero-image">
-            <img src="foto.jpg" alt="Wanita elegan dengan perawatan rambut">
+        <div class="home-right-image">
+            <img src="IMG_1919.PNG" alt="Model Rambut Indah" class="main-hero-img">
         </div>
     </section>
 
     <section id="about" class="fade-out">
-        <button class="back-btn" onclick="goBack('#home')">← Back to Home</button>
-        <h2>Tentang Kami</h2>
+        <button class="back-btn" onclick="goBack('#home')">Back to Home</button>
+        <h2>About Us</h2>
         <div class="about-us-box">
-            <p>A TRUSTED CALL-OUT SALON SERVICE, accepting appointments to homes, hotels, and other big events.Available from any salon, anytime, and anywhere.</p>
+            <p>BeauCall is A TRUSTED CALL-OUT SALON SERVICE, accepting appointments to homes, hotels, and other big events. Available from any salon, anytime, and anywhere.</p>
         </div>
-        <p>BeauCall adalah layanan salon panggilan profesional yang menyediakan layanan kecantikan lengkap langsung di lokasi Anda. Tim kami terdiri dari ahli berpengalaman yang siap memberikan hasil terbaik.</p>
         <div class="about-images">
              <img src="model 1.jpg" alt="Model 1">
-            <img src="model 2.jpg" alt="Model 2">
+             <img src="model 2.jpg" alt="Model 2">
         </div>
     </section>
 
     <section id="menu" class="fade-out">
-        <button class="back-btn" onclick="goBack('#about')">← Back to About</button>
+        <button class="back-btn" onclick="goBack('#about')">Back to About</button>
         <h2>Services List</h2>
         <div class="services">
             <div class="service"><h3 class="service-list-item">Hair Cut</h3></div>
@@ -524,15 +529,17 @@
     </section>
 
     <section id="booking" class="fade-out">
-        <button class="back-btn" onclick="goBack('#menu')">← Back to Services</button>
+        <button class="back-btn" onclick="goBack('#menu')">Back to Services</button>
         <h2>Book Appointment</h2>
         
         <form id="booking-form">
             <input type="text" id="name" placeholder="Nama Lengkap" required>
             <input type="tel" id="whatsapp" placeholder="Nomor WhatsApp (0856-9487-0477)" required>
             <input type="text" id="address" placeholder="Alamat Lengkap (Rumah/Hotel/Event)" required>
-            <input type="date" id="date" required>
-            <input type="time" id="time" required>
+            <div style="display: flex; gap: 1rem;">
+                <input type="date" id="date" required style="flex:1;">
+                <input type="time" id="time" required style="flex:1;">
+            </div>
             <select id="service" required>
                 <option value="">Pilih Layanan</option>
                 <option value="Hair Cut">Hair Cut</option>
@@ -548,13 +555,12 @@
                 <option value="Graduation Makeup">Graduation Makeup</option>
                 <option value="Wedding / Engagement Makeup">Wedding / Engagement Makeup</option>
             </select>
-            <button type="submit" id="search-salon-btn">Cari Salon/Partner (Klik ini jika ada perubahan data)</button>
+            <button type="button" id="search-salon-btn" class="btn">Cari Salon/Partner</button>
         </form>
 
-        <div id="salon-results" style="display: none; margin-top: 2rem;">
+        <div id="salon-results" style="display: none; margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
             <h3>Pilih Salon Partner Anda</h3>
-            <div id="salon-list">
-                </div>
+            <div id="salon-list"></div>
             <button id="confirm-booking-btn" class="btn" style="width: 100%; margin-top: 1rem;" disabled>Lanjutkan ke Pembayaran & WhatsApp</button>
         </div>
     </section>
@@ -562,149 +568,150 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h4>Contact Us!</h4>
-                <p>📞 WhatsApp: 0856-9487-0477</p>
-                <p>📧 Email:beaucallofficial@gmail.com</p>
+                <h4>Contact Us</h4>
+                <p>WhatsApp: 0856-9487-0477</p>
+                <p>Email: beaucallofficial@gmail.com</p>
             </div>
             <div class="footer-section social-icons">
-                <a href="https://wa.me/6285694870477" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://instagram.com/beaucall.official" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>	
+                <a href="https://wa.me/6285694870477" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/beaucall.official" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>    
             </div>
         </div>
         <p>&copy; 2025 BeauCall. All Rights Reserved.</p>
-        <p class="team-info">SIRCA FRECILIA RAMADHANI EMPI. TIMOTIUS ANDARU. HARITS MAULANA YUSUF. DANIEL ADRIEL CARLO.  ZASKIA MAULINA SYIFA. RASHIFAH HASNA FAIZAH ELHAQ  - JAKARTA STATE UNIVERSITY - DIGITAL BUSINESS 2024.</p>
+        <p class="team-info">SISCA FRECILIA RAMADHANI EMPI (CEO) • TIMOTIUS ANDARU (MO) • ZASKIA MAULINA SYIFA (MO) • HARITS MAULANA YUSUF (PROGRAMMER) • DANIEL ADRIEL CARLO (DESIGNER) • RASHIFAH HASNA FAIZAH ELHAQ (DESIGNER)</p>
     </footer>
 
     <script>
-        // Hamburger Menu Toggle
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
+    const TRANSITION_DELAY = 500; // 0.5s di CSS
 
-        // Fungsi untuk mengelola perpindahan section (simulasi navigasi)
-        function navigateTo(targetId) {
-            const target = document.querySelector(targetId);
-            document.querySelectorAll('section').forEach(sec => {
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+
+    function navigateTo(targetId) {
+        const target = document.querySelector(targetId);
+        
+        document.querySelectorAll('section').forEach(sec => {
+            if (sec.classList.contains('fade-in')) {
                 sec.classList.remove('fade-in');
                 sec.classList.add('fade-out');
-            });
 
-            // Gulir ke atas halaman sebelum menampilkan section baru
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Menunda sedikit untuk efek transisi
-            setTimeout(() => {
-                target.classList.remove('fade-out');
-                target.classList.add('fade-in');
-            }, 300);
-        }
-        
-        // Memastikan semua link navigasi menggunakan fungsi navigateTo
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                navigateTo(this.getAttribute('href'));
-                // Tutup menu hamburger setelah klik (untuk mobile)
-                document.querySelector('.nav-links').classList.remove('active');
-            });
+                setTimeout(() => {
+                    if (sec !== target) { 
+                        sec.style.display = 'none';
+                    }
+                }, TRANSITION_DELAY);
+            } else {
+                 sec.style.display = 'none';
+            }
         });
 
-        // Back Button Function
-        function goBack(targetId) {
-            navigateTo(targetId);
+        target.style.display = 'flex'; 
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(() => {
+            target.classList.remove('fade-out');
+            target.classList.add('fade-in');
+        }, 300);
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            navigateTo(this.getAttribute('href'));
+            document.querySelector('.nav-links').classList.remove('active');
+        });
+    });
+
+    // Back Button Function
+    function goBack(targetId) {
+        navigateTo(targetId);
+    }
+
+    // Initial load logic
+    window.addEventListener('load', () => {
+        document.querySelectorAll('section').forEach(sec => {
+            sec.style.display = 'none';
+        });
+        const homeSection = document.querySelector('#home');
+        homeSection.style.display = 'flex'; 
+        homeSection.classList.add('fade-in');
+    });
+
+    
+    /* --- LOGIKA BOOKING --- */
+    
+    const availableSalons = [
+        { id: 1, name: "BeauSalon Jakarta Pusat", estTime: "30 menit", rating: 4.8 },
+        { id: 2, name: "The Gold Touch Beauty", estTime: "45 menit", rating: 4.9 },
+        { id: 3, name: "Homey Hair & Spa", estTime: "1 jam", rating: 4.5 }
+    ];
+
+    let selectedSalon = null;
+
+    function handleBookingSearch() {
+        const service = document.getElementById('service').value;
+
+        const salonListContainer = document.getElementById('salon-list');
+        const salonResultsSection = document.getElementById('salon-results');
+        const confirmBtn = document.getElementById('confirm-booking-btn');
+        
+        if (!service) {
+            salonResultsSection.style.display = 'none';
+            return;
         }
 
-        // Initial fade-in for home
-        window.addEventListener('load', () => {
-            document.querySelector('#home').classList.add('fade-in');
-        });
-        
-        /* --- LOGIKA BOOKING BARU YANG DIMODIFIKASI --- */
+        salonListContainer.innerHTML = '';
+        selectedSalon = null;
+        confirmBtn.disabled = true;
 
-        // Daftar Salon/Partner (Simulasi Data)
-        const availableSalons = [
-            { id: 1, name: "BeauSalon Jakarta Pusat", estTime: "30 menit", rating: 4.8 },
-            { id: 2, name: "The Gold Touch Beauty", estTime: "45 menit", rating: 4.9 },
-            { id: 3, name: "Homey Hair & Spa", estTime: "1 jam", rating: 4.5 }
-        ];
-
-        let selectedSalon = null; // Variabel untuk menyimpan salon yang dipilih
-
-        // 1. Fungsi untuk mencari salon dan menampilkan hasilnya
-        function handleBookingSearch() {
-            // Ambil nilai layanan yang dipilih
-            const service = document.getElementById('service').value;
-
-            const salonListContainer = document.getElementById('salon-list');
-            const salonResultsSection = document.getElementById('salon-results');
-            const confirmBtn = document.getElementById('confirm-booking-btn');
+        availableSalons.forEach(salon => {
+            const salonDiv = document.createElement('div');
+            salonDiv.classList.add('salon-item');
+            salonDiv.setAttribute('data-salon-id', salon.id);
+            salonDiv.innerHTML = `
+                <h4>${salon.name}</h4>
+                <p>Layanan: <strong>${service}</strong></p>
+                <p>Est. Kedatangan: ${salon.estTime} | Rating: ${salon.rating} <i class="fas fa-star" style="color: #d4af37;"></i></p>
+            `;
             
-            // Cek jika layanan belum dipilih, sembunyikan hasil
-            if (!service) {
-                salonResultsSection.style.display = 'none';
-                return;
-            }
-
-            // Reset hasil sebelumnya
-            salonListContainer.innerHTML = '';
-            selectedSalon = null;
-            confirmBtn.disabled = true;
-
-            // Tampilkan hasil simulasi
-            availableSalons.forEach(salon => {
-                const salonDiv = document.createElement('div');
-                salonDiv.classList.add('salon-item');
-                salonDiv.setAttribute('data-salon-id', salon.id);
-                // Menampilkan layanan yang dipilih pengguna
-                salonDiv.innerHTML = `
-                    <h4>${salon.name}</h4>
-                    <p>Layanan: **${service}**</p>
-                    <p>Est. Kedatangan: ${salon.estTime} | Rating: ${salon.rating} <i class="fas fa-star" style="color: gold;"></i></p>
-                `;
-                
-                // Tambahkan event listener untuk memilih salon
-                salonDiv.addEventListener('click', () => {
-                    document.querySelectorAll('.salon-item').forEach(item => item.classList.remove('selected'));
-                    salonDiv.classList.add('selected');
-                    selectedSalon = salon;
-                    confirmBtn.disabled = false;
-                });
-
-                salonListContainer.appendChild(salonDiv);
+            salonDiv.addEventListener('click', () => {
+                document.querySelectorAll('.salon-item').forEach(item => item.classList.remove('selected'));
+                salonDiv.classList.add('selected');
+                selectedSalon = salon;
+                confirmBtn.disabled = false;
             });
 
-            // Tampilkan bagian hasil
-            salonResultsSection.style.display = 'block';
+            salonListContainer.appendChild(salonDiv);
+        });
 
-            // Gulir ke bagian hasil
-            salonResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        salonResultsSection.style.display = 'block';
+        salonResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function proceedToWhatsApp() {
+        const form = document.getElementById('booking-form');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
         }
 
-        // 2. Fungsi untuk melanjutkan ke pembayaran/konfirmasi WhatsApp
-        function proceedToWhatsApp() {
-            // Validasi seluruh form (menggunakan HTML5 API checkValidity)
-            const form = document.getElementById('booking-form');
-            if (!form.checkValidity()) {
-                form.reportValidity(); // Menampilkan pesan error browser default
-                return;
-            }
+        if (!selectedSalon) {
+            alert("Mohon pilih salah satu Salon Partner terlebih dahulu.");
+            return;
+        }
 
-            if (!selectedSalon) {
-                alert("Mohon pilih salah satu Salon Partner terlebih dahulu.");
-                return;
-            }
+        const name = document.getElementById('name').value;
+        const whatsapp = document.getElementById('whatsapp').value;
+        const address = document.getElementById('address').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const service = document.getElementById('service').value;
 
-            // Ambil data form
-            const name = document.getElementById('name').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const address = document.getElementById('address').value;
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            const service = document.getElementById('service').value;
-
-            const message = `Halo BeauCall, saya telah memilih salon dan siap untuk konfirmasi pembayaran.
+        const message = `Halo BeauCall, saya telah memilih salon dan siap untuk konfirmasi pembayaran.
 
 *Detail Pemesanan:*
 Nama: ${name}
@@ -717,29 +724,21 @@ Salon Partner Terpilih: ${selectedSalon.name} (ID: ${selectedSalon.id})
 
 Mohon kirimkan detail pembayaran untuk booking ini. Terima kasih!`;
 
-            // Arahkan ke WhatsApp dengan pesan yang sudah diformat
-            const waUrl = `https://wa.me/6285694870477?text=${encodeURIComponent(message)}`;
-            window.open(waUrl, '_blank');
+        const waUrl = `https://wa.me/6285694870477?text=${encodeURIComponent(message)}`;
+        window.open(waUrl, '_blank');
+    }
+
+    document.getElementById('service').addEventListener('change', handleBookingSearch);
+
+    document.getElementById('search-salon-btn').addEventListener('click', () => {
+        if (document.getElementById('service').value) {
+            handleBookingSearch();
+        } else {
+            alert("Mohon pilih layanan yang diinginkan terlebih dahulu.");
         }
+    });
 
-
-        // 3. Menghubungkan Event Listener ke Tombol dan Dropdown
-        
-        // Pemicu baru: Ketika pilihan layanan diubah, tampilkan salon rekomendasi
-        document.getElementById('service').addEventListener('change', handleBookingSearch);
-
-        // Pemicu untuk tombol "Cari Salon/Partner" (untuk me-refresh hasil jika user mengubah Nama/Alamat, dll.)
-        document.getElementById('search-salon-btn').addEventListener('click', (event) => {
-             // Cek apakah layanan sudah dipilih sebelum mencari
-            if (document.getElementById('service').value) {
-                handleBookingSearch();
-            } else {
-                alert("Mohon pilih layanan yang diinginkan terlebih dahulu.");
-            }
-        });
-
-        // Pemicu untuk tombol "Lanjutkan ke Pembayaran & WhatsApp"
-        document.getElementById('confirm-booking-btn').addEventListener('click', proceedToWhatsApp);
+    document.getElementById('confirm-booking-btn').addEventListener('click', proceedToWhatsApp);
 
     </script>
 </body>
