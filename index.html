@@ -1702,6 +1702,27 @@
         }, 2000);
     }
 
+    function closePaymentModal() {
+        // 1. Sembunyikan Modal Utama
+        document.getElementById('payment-modal').style.display = "none";
+
+        // 2. RESET TAMPILAN (Penting!)
+        // Kita kembalikan tampilan ke "Instruksi Bayar" agar siap dipakai lagi
+        // Beri sedikit delay agar user tidak melihat perubahannya saat modal menutup
+        setTimeout(() => {
+            document.getElementById('payment-instruction').style.display = 'block'; // Munculkan lagi instruksi
+            document.getElementById('payment-loading').style.display = 'none';      // Sembunyikan loading
+            document.getElementById('payment-success').style.display = 'none';      // Sembunyikan sukses
+        }, 300);
+
+        // 3. Matikan Suara (Jika masih berbunyi)
+        const audio = document.getElementById('success-sound');
+        if(audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+
     function sendToWhatsApp() {
         const name = document.getElementById('name').value;
         const whatsapp = document.getElementById('whatsapp').value;
